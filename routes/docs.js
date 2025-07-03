@@ -16,7 +16,10 @@ docsRouter.get("/:id", (req, res) => {
 
 docsRouter.post(
   "/upload",
-  upload.single("pdf"),
+  upload.fields([
+    { name: "pdf", maxCount: 1 },
+    { name: "signature", maxCount: 1 },
+  ]),
   validateUploadFile,
   uploadFile
 );
