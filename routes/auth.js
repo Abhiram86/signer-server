@@ -1,6 +1,7 @@
 import express from "express";
 import { getUser, login, logout, register } from "../controllers/auth.js";
 import {
+  optionsMiddleware,
   validateGetUser,
   validateLogin,
   validateLogout,
@@ -24,7 +25,7 @@ authRouter.options("*", (req, res) => {
 });
 
 authRouter.post("/register", validateRegister, register);
-authRouter.post("/login", validateLogin, login);
+authRouter.post("/login", optionsMiddleware, validateLogin, login);
 authRouter.get("/getuser", validateGetUser, getUser);
 authRouter.post("/logout", validateLogout, logout);
 
