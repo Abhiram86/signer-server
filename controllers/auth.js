@@ -32,7 +32,7 @@ export const register = async (req, res) => {
     );
 
     res.cookie("sessionToken", sessionToken, {
-      httpOnly: true,
+      httpOnly: false,
       secure: true,
       sameSite: "None",
       maxAge: 10 * 60 * 1000, // 10 minutes
@@ -80,7 +80,7 @@ export const login = async (req, res) => {
       secure: true,
       maxAge: 10 * 60 * 1000, // 10 minutes
       sameSite: "None",
-      httpOnly: true,
+      httpOnly: false,
     });
 
     res.status(200).json({
