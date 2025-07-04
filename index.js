@@ -10,15 +10,16 @@ const app = express();
 
 connectDB();
 
-app.options(
-  "*",
-  cors({
-    origin: "https://signer-client-gray.vercel.app",
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-    credentials: true,
-    allowedHeaders: ["Content-Type", "Authorization", "Set-Cookie"],
-  })
-);
+const corsOptions = {
+  origin: "https://signer-client-gray.vercel.app",
+  credentials: true,
+  allowedHeaders: ["Content-Type", "Authorization", "Set-Cookie"],
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+};
+
+app.use(cors(corsOptions));
+
+app.options("*", cors(corsOptions), (req, res) => res.sendStatus(200));
 
 app.use(express.json());
 app.use(cookieParser());
