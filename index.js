@@ -12,7 +12,7 @@ connectDB();
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "https://signer-client-gray.vercel.app",
     credentials: true,
   })
 );
