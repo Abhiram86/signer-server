@@ -10,10 +10,13 @@ const app = express();
 
 connectDB();
 
-app.use(
+app.options(
+  "*",
   cors({
     origin: "https://signer-client-gray.vercel.app",
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization", "Set-Cookie"],
   })
 );
 
