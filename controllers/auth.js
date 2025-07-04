@@ -33,7 +33,7 @@ export const register = async (req, res) => {
 
     res.cookie("sessionToken", sessionToken, {
       httpOnly: false,
-      secure: false,
+      secure: true,
       sameSite: "Strict",
       maxAge: 10 * 60 * 1000, // 10 minutes
     });
@@ -77,7 +77,7 @@ export const login = async (req, res) => {
     );
 
     res.cookie("sessionToken", sessionToken, {
-      secure: false,
+      secure: true,
       maxAge: 10 * 60 * 1000, // 10 minutes
       sameSite: "Strict",
       httpOnly: false,
