@@ -5,7 +5,6 @@ import { connectDB } from "./config/db.js";
 import authRouter from "./routes/auth.js";
 import docsRouter from "./routes/docs.js";
 import { signRouter } from "./routes/sign.js";
-import serverless from "serverless-http";
 
 const app = express();
 
@@ -29,8 +28,6 @@ app.get("/", (req, res) => {
   res.send("Server is running");
 });
 
-// app.listen(8080, () => {
-//   console.log("Server is running on port 8080");
-// });
-
-export const handler = serverless(app);
+app.listen(8080, () => {
+  console.log("Server is running on port 8080");
+});
