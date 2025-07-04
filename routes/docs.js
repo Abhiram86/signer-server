@@ -1,6 +1,6 @@
 import express from "express";
 import multer from "multer";
-import { getFiles, uploadFile } from "../controllers/docs.js";
+import { getFile, getFiles, uploadFile } from "../controllers/docs.js";
 import { validateGetFiles, validateUploadFile } from "../middleware/docs.js";
 
 const docsRouter = express.Router();
@@ -10,16 +10,11 @@ const upload = multer({ storage });
 
 docsRouter.get("/", validateGetFiles, getFiles);
 
-docsRouter.get("/:id", (req, res) => {
-  res.send("docs");
-});
+docsRouter.get("/:sessionToken", getFile);
 
 docsRouter.post(
   "/upload",
-  upload.fields([
-    { name: "pdf", maxCount: 1 },
-    { name: "signature", maxCount: 1 },
-  ]),
+  upload.single("file"),
   validateUploadFile,
   uploadFile
 );

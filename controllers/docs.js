@@ -1,3 +1,4 @@
+import { redis } from "../config/db.js";
 import Docs from "../models/Docs.js";
 import { PDFDocument } from "pdf-lib";
 
@@ -10,52 +11,34 @@ export const getFiles = async (req, res) => {
   }
 };
 
-export const uploadFile = async (req, res) => {
+export const getFile = async (req, res) => {
+  const { sessionToken } = req.params;
   try {
-    const pdfBuffer = req.files["pdf"][0].buffer;
-    const imageBuffer = req.files["signature"][0].buffer;
-
-    const { page, x, y, width, height } = req.body;
-
-    // Load PDF
-    const pdfDoc = await PDFDocument.load(pdfBuffer);
-    const embedImage = await pdfDoc.embedPng(imageBuffer);
-
-    if (!pdfDoc || !embedImage) {
-      return res.status(400).json({ error: "Missing PDF or image" });
+    const signData = await redis.get(sessionToken);
+    if (!signData) {
+      return res.status(404).json({ error: "Expired" });
     }
-
-    const pages = pdfDoc.getPages();
-    const targetPage = pages[parseInt(page) - 1]; // 1-indexed
-
-    const imgWidth = targetPage.getWidth() * parseFloat(width);
-    const imgHeight = targetPage.getHeight() * parseFloat(height);
-    const imgX = targetPage.getWidth() * parseFloat(x);
-    const imgY = targetPage.getHeight() * (1 - parseFloat(y)) - imgHeight;
-
-    targetPage.drawImage(embedImage, {
-      x: imgX,
-      y: imgY,
-      width: imgWidth,
-      height: imgHeight,
-    });
-
-    const finalPdfBytes = await pdfDoc.save();
-
-    const newDoc = new Docs({
-      fileName: req.files["pdf"][0].originalname,
-      file: {
-        data: Buffer.from(finalPdfBytes),
-        contentType: "application/pdf",
-      },
-      userId: req.body.userId,
-    });
-
-    await newDoc.save();
-
-    res.status(200).json({ message: "PDF updated and saved to DB." });
+    const doc = await Docs.findOne({ _id: signData.docId });
+    res.status(200).json({ doc });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Failed to process the PDF." });
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const uploadFile = async (req, res) => {
+  if (!req.file) return res.status(400).json({ error: "No file uploaded" });
+  try {
+    const newDoc = new Docs({
+      fileName: req.file.originalname,
+      userId: req.body.userId,
+      file: {
+        data: req.file.buffer,
+        contentType: req.file.mimetype,
+      },
+    });
+    await newDoc.save();
+    res.status(200).json({ message: "File uploaded successfully" });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
   }
 };

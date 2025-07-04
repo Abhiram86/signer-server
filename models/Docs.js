@@ -19,6 +19,10 @@ const docsSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  status: {
+    type: String,
+    default: "pending",
+  },
 });
 
 export default mongoose.model("Docs", docsSchema);
