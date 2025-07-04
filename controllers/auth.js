@@ -36,6 +36,7 @@ export const register = async (req, res) => {
       secure: true,
       sameSite: "none",
       maxAge: 10 * 60 * 1000, // 10 minutes
+      path: "/",
     });
 
     res.status(200).json({
@@ -81,6 +82,7 @@ export const login = async (req, res) => {
       maxAge: 10 * 60 * 1000, // 10 minutes
       sameSite: "none",
       httpOnly: true,
+      path: "/",
     });
 
     res.status(200).json({
