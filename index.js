@@ -12,8 +12,9 @@ connectDB();
 
 app.use(
   cors({
-    origin: "https://signer-client-gray.vercel.app/",
+    origin: "https://signer-client-gray.vercel.app",
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
   })
 );
 app.use(express.json());
