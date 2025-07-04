@@ -15,6 +15,7 @@ app.use(
     origin: "https://signer-client-gray.vercel.app",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
   })
 );
 app.use(express.json());
