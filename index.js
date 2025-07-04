@@ -10,7 +10,8 @@ const app = express();
 
 connectDB();
 
-app.use(
+app.options(
+  "*",
   cors({
     origin: "https://signer-client-gray.vercel.app",
     credentials: true,
@@ -18,6 +19,7 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
   })
 );
+
 app.use(express.json());
 app.use(cookieParser());
 
