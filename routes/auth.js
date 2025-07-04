@@ -25,6 +25,9 @@ authRouter.options("*", (req, res) => {
 });
 
 authRouter.post("/register", validateRegister, register);
+authRouter.options("/login", (req, res) =>
+  res.status(200).json({ message: "OK" })
+);
 authRouter.post("/login", optionsMiddleware, validateLogin, login);
 authRouter.get("/getuser", validateGetUser, getUser);
 authRouter.post("/logout", validateLogout, logout);
