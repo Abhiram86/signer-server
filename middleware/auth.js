@@ -15,6 +15,14 @@ const logoutSchema = z.object({
   sessiontoken: z.string(),
 });
 
+export const optionsMiddleware = (req, res, next) => {
+  if (req.method === "OPTIONS") {
+    res.status(200).json({ message: "OK" });
+  } else {
+    next();
+  }
+};
+
 export const validateRegister = (req, res, next) => {
   try {
     registerSchema.parse(req.body);
